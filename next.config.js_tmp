@@ -1,0 +1,8 @@
+// next.config.js
+const repoName = 'tmp'; // 저장소 이름으로 변경
+
+module.exports = {
+  basePath: `/${repoName}`,
+  assetPrefix: `/${repoName}/`,
+output: 'export', 
+};
