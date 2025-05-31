@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비상장 AI 기업 투자 정보</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .key-message {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .company-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .company-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .company-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .company-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .company-number {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .company-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .company-location {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-left: auto;
+        }
+
+        .company-info {
+            margin: 15px 0;
+        }
+
+        .info-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #666;
+            min-width: 60px;
+            margin-right: 10px;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ffd93d, #ff6b6b);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .investors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .investor-tag {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            color: #555;
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .conclusion {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .conclusion h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .conclusion p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .companies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🚀 비상장 AI 기업 투자 정보</h1>
+            <p class="subtitle">글로벌 투자자들이 주목하는 차세대 AI 유니콘들</p>
+            <div class="key-message">
+                💰 비상장 + 중국/유럽 AI 기업이 진짜 기회!
+            </div>
+        </header>
+
+        <section class="stats-section">
+            <h2 style="text-align: center; margin-bottom: 10px; color: #333;">💡 핵심 인사이트</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">🎯</div>
+                    <div class="stat-label">실리콘밸리 VC<br>월가 사모펀드 집중</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">🌍</div>
+                    <div class="stat-label">중동 석유머니까지<br>총집결</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">📈</div>
+                    <div class="stat-label">상장 후<br>10배 수익 가능</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">🔒</div>
+                    <div class="stat-label">대부분 사람들<br>정보 부족</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="companies-grid">
+            <div class="company-card">
+                <div class="company-header">
+                    <div class="company-number">1</div>
+                    <div class="company-name">미스트랄 AI</div>
+                    <div class="company-location">🇫🇷 프랑스</div>
+                </div>
+                <div class="company-info">
+                    <div class="info-item">
+                        <div class="info-label">별명:</div>
+                        <div class="info-value">유럽판 오픈AI</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">사업:</div>
+                        <div class="info-value">자체 LLM 개발, GPT 대체용</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">성과:</div>
+                        <div class="info-value">설립 6개월 만에 <span class="highlight">60억 달러</span> 기업가치</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">전망:</div>
+                        <div class="info-value">유럽 AI 왕 확률 <span class="highlight">99%</span>, IPO 계획 공개</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">투자자:</div>
+                        <div class="investors">
+                            <span class="investor-tag">엔비디아</span>
+                            <span class="investor-tag">마이크로소프트</span>
+                            <span class="investor-tag">세일즈포스</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-card">
+                <div class="company-header">
+                    <div class="company-number">2</div>
+                    <div class="company-name">신시지아</div>
+                    <div class="company-location">🇬🇧 영국</div>
+                </div>
+                <div class="company-info">
+                    <div class="info-item">
+                        <div class="info-label">사업:</div>
+                        <div class="info-value">AI 영상 생성 (텍스트→아바타 영상)</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">고객:</div>
+                        <div class="info-value">포춘 100대 기업 중 <span class="highlight">70%</span> 확보</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">매출:</div>
+                        <div class="info-value">연 <span class="highlight">1억 달러</span> 돌파</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">별명:</div>
+                        <div class="info-value">영상계 챗GPT</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">투자자:</div>
+                        <div class="investors">
+                            <span class="investor-tag">구글 벤처스</span>
+                            <span class="investor-tag">엔비디아</span>
+                            <span class="investor-tag">어도비</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-card">
+                <div class="company-header">
+                    <div class="company-number">3</div>
+                    <div class="company-name">텐스토런트</div>
+                    <div class="company-location">🇺🇸 캐나다</div>
+                </div>
+                <div class="company-info">
+                    <div class="info-item">
+                        <div class="info-label">사업:</div>
+                        <div class="info-value">AI 반도체 개발 (엔비디아 대항마)</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CEO:</div>
+                        <div class="info-value">전 AMD/애플 칩 전설 <span class="highlight">짐 켈러</span></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">성과:</div>
+                        <div class="info-value"><span class="highlight">1.5억 달러</span> 규모 고객 확보</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">전망:</div>
+                        <div class="info-value">AI 하드웨어 다음 대장, 거의 유니콘급</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">투자자:</div>
+                        <div class="investors">
+                            <span class="investor-tag">삼성</span>
+                            <span class="investor-tag">현대차</span>
+                            <span class="investor-tag">아마존</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-card">
+                <div class="company-header">
+                    <div class="company-number">4</div>
+                    <div class="company-name">인실리코 메디슨</div>
+                    <div class="company-location">🇭🇰 홍콩</div>
+                </div>
+                <div class="company-info">
+                    <div class="info-item">
+                        <div class="info-label">사업:</div>
+                        <div class="info-value">AI 신약 개발</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">성과:</div>
+                        <div class="info-value">AI 신약 <span class="highlight">사람 임상</span> 진입</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">지위:</div>
+                        <div class="info-value">전 세계 가장 임상 가까운 AI 신약 회사</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">가치:</div>
+                        <div class="info-value">기업가치 <span class="highlight">10억 달러</span> 돌파</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">상장:</div>
+                        <div class="info-value"><span class="highlight">2025년 홍콩 증시</span> 상장 추진</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">투자자:</div>
+                        <div class="investors">
+                            <span class="investor-tag">사우디 아람코</span>
+                            <span class="investor-tag">워버그 핀커스</span>
+                            <span class="investor-tag">글로벌 VC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-card">
+                <div class="company-header">
+                    <div class="company-number">5</div>
+                    <div class="company-name">미니맥스</div>
+                    <div class="company-location">🇨🇳 중국</div>
+                </div>
+                <div class="company-info">
+                    <div class="info-item">
+                        <div class="info-label">별명:</div>
+                        <div class="info-value">중국판 오픈AI</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">사업:</div>
+                        <div class="info-value">톡키 AI 챗봇으로 중국 1위</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">투자:</div>
+                        <div class="info-value">2024년 알리바바 <span class="highlight">6억 달러</span> 투자</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">지위:</div>
+                        <div class="info-value">중국 AI <span class="highlight">4대 호랑이</span> 중 하나</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">수혜:</div>
+                        <div class="info-value">중국 AI 국가전략 정책 자동 탑승</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">투자자:</div>
+                        <div class="investors">
+                            <span class="investor-tag">알리바바</span>
+                            <span class="investor-tag">텐센트</span>
+                            <span class="investor-tag">홍산자본</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="conclusion">
+            <h2>🎯 투자 전망 및 결론</h2>
+            <p>
+                이 5개 기업은 상장만 하면 바로 <strong>시총 수십조 원대</strong> 기업이 될 잠재력을 가지고 있습니다.
+                이미 월가, 실리콘밸리, 중동 자금이 움직이고 있으며, 정보가 빠르면 프리IPO 펀드나 후속 투자도 가능합니다.
+            </p>
+            <p>
+                <strong>핵심은 미리 공부해두는 것!</strong> 기회를 놓치고 나면 정말 후회하게 됩니다.
+            </p>
+            <button class="cta-button" onclick="alert('투자는 신중하게! 충분한 리서치 후 결정하세요.')">
+                💡 투자 기회 놓치지 마세요!
+            </button>
+        </section>
+    </div>
+
+    <script>
+        // 카드 호버 효과 강화
+        document.querySelectorAll('.company-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // 초기 상태 설정 및 관찰 시작
+        document.querySelectorAll('.company-card, .stats-section, .conclusion').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
